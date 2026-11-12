@@ -2563,17 +2563,19 @@ async put(r) {
           alert("Gagal menyimpan sandi.");
         }
       }
-      function hapusSemua() {
-        if (
-          confirm(
-            "Hapus SEMUA data nilai siswa? Tindakan ini tidak dapat dibatalkan.",
-          )
-        )
-          DB.clear().then(() => {
-            V.p.rows = null;
-            render(1);
-          });
-      }
+      async function hapusSemua(){
+  if(!confirm("Hapus SEMUA data nilai siswa? Tindakan ini tidak dapat dibatalkan.")) return;
+
+  try {
+    await DB.clear();
+    alert("Data siswa berhasil dihapus.");
+    V.p.rows = null;
+    render(1);
+  } catch(e) {
+    console.error("Gagal menghapus data:", e);
+    alert("Gagal menghapus data: " + (e.message || e));
+  }
+}
       function csv() {
         const q = (v) => {
             v = String(v);
