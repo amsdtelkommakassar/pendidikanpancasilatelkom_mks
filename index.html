@@ -1754,12 +1754,12 @@ async put(r) {
                   V.p.err = "";
                   if (V.v === "dash" || V.v === "detail") render(true);
                 },
-                () => {
-                  V.p.rows = [];
-                  V.p.err =
-                    "Data tidak dapat dimuat. Periksa koneksi, tabel, dan kebijakan akses Supabase.";
-                  render(true);
-                },
+                (e)=>{
+  console.error("Supabase dashboard error:", e);
+  V.p.rows=[];
+  V.p.err="Gagal memuat data: "+(e?.message || String(e));
+  render(true)
+},
               );
           } else
             DB.list()
@@ -1768,10 +1768,10 @@ async put(r) {
                 V.p.rows = r;
                 render(true);
               })
-              .catch(() => {
+              .catch((e) => {
+                console.error("Supabase dashboard error:", e);
                 V.p.rows = [];
-                V.p.err =
-                  "Data tidak dapat dimuat. Periksa koneksi, tabel, dan kebijakan akses Supabase.";
+                V.p.err = "Gagal memuat data: " + (e?.message || String(e));
                 render(true);
               });
         }
